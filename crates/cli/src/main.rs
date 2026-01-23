@@ -1,12 +1,12 @@
-use arboard::Clipboard;
 use clap::{Parser, Subcommand};
-use core::Crypto;
-use daemon_utils::get_master_key_from_user;
-use std::io::{self, Write};
-use std::thread;
-use std::time::Duration;
 use storage::Db;
 
+use crate::commands::add_credential::add_credential;
+use crate::commands::get_credential::get_credential;
+use crate::commands::nuke_credentials::nuke_credentials;
+use crate::commands::update_credential::update_credential;
+
+mod commands;
 mod daemon_utils;
 
 #[derive(Parser)]
@@ -44,68 +44,16 @@ fn main() {
             service,
             username,
             secret,
-        } => {
-            let key = get_master_key_from_user();
-            let (encrypted, nonce) = Crypto::encrypt(&secret, &key);
-            db.add_credential(&service, &username, &encrypted, &nonce)
-                .unwrap();
-            println!(
-                "Success: Successfully saved `{}` credential for `{}`.",
-                service, username
-            );
-        }
+        } => add_credential(&db, service, username, secret),
         Commands::Get {
             service,
             identifier,
-        } => {
-            // 1. Try to get key from Daemon first
-            let key = get_master_key_from_user();
-
-            // 4. Proceed with decryption
-            if let Ok(cred) = db.get_credential(&service, &identifier) {
-                let decrypted = Crypto::decrypt(&cred.secret, &key, &cred.nonce);
-
-                let mut cb = Clipboard::new().expect("Clipboard: Cannot connect to clipboard");
-                cb.set_text(decrypted).unwrap();
-                println!(
-                    "Clipboard: Password for `{}` on `{}` copied to clipboard.",
-                    cred.identifier, service
-                );
-
-                // Clipboard auto-clear thread
-                thread::spawn(move || {
-                    thread::sleep(Duration::from_secs(15));
-                    if let Ok(mut cb_internal) = Clipboard::new() {
-                        let _ = cb_internal.set_text("".to_string());
-                    }
-                });
-            } else {
-                println!("Error: No credential found for service `{}`.", service);
-            }
-        }
+        } => get_credential(&db, service, identifier),
         Commands::Update {
             service,
             identifier,
             secret,
-        } => {
-            let key = get_master_key_from_user();
-            let (encrypted, nonce) = Crypto::encrypt(&secret, &key);
-            db.update_credential(&service, &identifier, &encrypted, &nonce)
-                .unwrap();
-            println!(
-                "Success: Successfully updated `{}` credential for `{}`.",
-                service, identifier
-            );
-        }
-        Commands::Nuke => {
-            print!("DANGER ZONE: Are you ABSOLUTELY sure you want to erase EVERYTHING? (y/N): ");
-            io::stdout().flush().unwrap();
-            let mut input = String::new();
-            io::stdin().read_line(&mut input).unwrap();
-            if input.trim().to_lowercase() == "y" {
-                db.delete_all_data().unwrap();
-                println!("Success: All passwords dropped from the database.");
-            }
-        }
+        } => update_credential(&db, service, identifier, secret),
+        Commands::Nuke => nuke_credentials(&db),
     }
 }
