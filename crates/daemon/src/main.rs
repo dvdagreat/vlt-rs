@@ -32,7 +32,7 @@ fn main() {
 
 fn handle_client(mut stream: UnixStream, store: Arc<Mutex<Option<Session>>>) {
     let mut buf = [0u8; 64];
-    if let Ok(size) = stream.read(&mut buf) {
+    if let Ok(_size) = stream.read(&mut buf) {
         let mut guard = store.lock().unwrap();
 
         if buf.starts_with(b"SET ") {
