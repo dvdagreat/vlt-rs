@@ -9,6 +9,7 @@ pub struct Db {
 pub struct CredentialRow {
     pub secret: Vec<u8>,
     pub nonce: Vec<u8>,
+    pub identifier: String,
 }
 
 impl Db {
@@ -52,6 +53,7 @@ impl Db {
                 Ok(CredentialRow {
                     secret: row.get(0)?,
                     nonce: row.get(1)?,
+                    identifier: row.get(2)?,
                 })
             },
         )

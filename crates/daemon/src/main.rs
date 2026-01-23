@@ -17,10 +17,7 @@ fn main() {
 
     let session_store: Arc<Mutex<Option<Session>>> = Arc::new(Mutex::new(None));
 
-    println!(
-        "🚀 Daemon running on {}. Cache duration: 5 mins.",
-        socket_path
-    );
+    println!("Daemon running on {}. Cache duration: 5 mins.", socket_path);
 
     for stream in listener.incoming() {
         if let Ok(stream) = stream {

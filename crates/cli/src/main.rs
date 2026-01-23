@@ -30,7 +30,7 @@ enum Commands {
 
 fn main() {
     let cli = Cli::parse();
-    let db = Db::init("vault.db").expect("Failed to open DB");
+    let db = Db::init("vault.db").expect("Failed to access the credential store");
 
     match cli.command {
         Commands::Add {
@@ -43,16 +43,19 @@ fn main() {
             let (encrypted, nonce) = Crypto::encrypt(&secret, &key);
             db.add_credential(&service, &username, &encrypted, &nonce)
                 .unwrap();
-            println!("✅ Saved {} successfully.", service);
+            println!(
+                "Success: Successfully saved `{}` credential for `{}`.",
+                service, username
+            );
         }
         Commands::Get { service } => {
             // 1. Try to get key from Daemon first
             let key = if let Some(cached_key) = get_key_from_daemon() {
-                println!("🔓 Using cached session...");
+                println!("Using master password from cache...");
                 cached_key
             } else {
                 // 2. Fallback to user prompt
-                let password = prompt_password("Master Password: ");
+                let password = prompt_password("Enter Master Password: ");
                 let derived_key = Crypto::derive_key(&password);
 
                 // 3. Save to daemon for future use (Start Session)
@@ -64,9 +67,12 @@ fn main() {
             if let Ok(cred) = db.get_credential(&service) {
                 let decrypted = Crypto::decrypt(&cred.secret, &key, &cred.nonce);
 
-                let mut cb = Clipboard::new().expect("Clipboard error");
+                let mut cb = Clipboard::new().expect("Clipboard: Cannot connect to clipboard");
                 cb.set_text(decrypted).unwrap();
-                println!("📋 Password for {} copied to clipboard.", service);
+                println!(
+                    "Clipboard: Password for `{}` on `{}` copied to clipboard.",
+                    cred.identifier, service
+                );
 
                 // Clipboard auto-clear thread
                 thread::spawn(move || {
@@ -78,13 +84,13 @@ fn main() {
             }
         }
         Commands::Nuke => {
-            print!("Are you sure you want to erase EVERYTHING? (y/N): ");
+            print!("DANGER ZONE: Are you ABSOLUTELY sure you want to erase EVERYTHING? (y/N): ");
             io::stdout().flush().unwrap();
             let mut input = String::new();
             io::stdin().read_line(&mut input).unwrap();
             if input.trim().to_lowercase() == "y" {
                 db.delete_all_data().unwrap();
-                println!("☢️ Vault shredded.");
+                println!("Success: All passwords dropped from the database.");
             }
         }
     }
