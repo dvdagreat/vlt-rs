@@ -24,7 +24,7 @@ enum Commands {
         secret: String,
     },
     /// Copy credential to clipboard
-    Get { service: String },
+    Get { service: String, identifier: String },
     /// Wipe all data and forget master password
     Nuke,
 }
@@ -48,12 +48,15 @@ fn main() {
                 service, username
             );
         }
-        Commands::Get { service } => {
+        Commands::Get {
+            service,
+            identifier,
+        } => {
             // 1. Try to get key from Daemon first
             let key = get_master_key_from_user();
 
             // 4. Proceed with decryption
-            if let Ok(cred) = db.get_credential(&service) {
+            if let Ok(cred) = db.get_credential(&service, &identifier) {
                 let decrypted = Crypto::decrypt(&cred.secret, &key, &cred.nonce);
 
                 let mut cb = Clipboard::new().expect("Clipboard: Cannot connect to clipboard");

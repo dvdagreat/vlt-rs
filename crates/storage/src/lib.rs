@@ -45,10 +45,10 @@ impl Db {
         Ok(())
     }
 
-    pub fn get_credential(&self, service: &str) -> Result<CredentialRow> {
+    pub fn get_credential(&self, service: &str, identifier: &str) -> Result<CredentialRow> {
         self.conn.query_row(
-            "SELECT secret, nonce, identifier FROM credentials WHERE service = ?1",
-            params![service],
+            "SELECT secret, nonce, identifier FROM credentials WHERE service = ?1 AND identifier = ?2",
+            params![service, identifier],
             |row| {
                 Ok(CredentialRow {
                     secret: row.get(0)?,
