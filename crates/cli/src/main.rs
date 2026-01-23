@@ -70,6 +70,8 @@ fn main() {
                         let _ = cb_internal.set_text("".to_string());
                     }
                 });
+            } else {
+                println!("Error: No credential found for service `{}`.", service);
             }
         }
         Commands::Nuke => {
