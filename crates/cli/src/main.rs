@@ -45,28 +45,6 @@ fn main() {
                 .unwrap();
             println!("✅ Saved {} successfully.", service);
         }
-        // Commands::Get { service } => {
-        //     // Check daemon first (omitted UDS client code for brevity, but you'd call GET here)
-        //     let master = prompt_password("Enter Master Password: ");
-        //     let key = Crypto::derive_key(&master);
-
-        //     if let Ok(cred) = db.get_credential(&service) {
-        //         let decrypted = Crypto::decrypt(&cred.secret, &key, &cred.nonce);
-        //         let mut cb = Clipboard::new().unwrap();
-        //         cb.set_text(decrypted).unwrap();
-        //         println!(
-        //             "📋 Password for {} copied to clipboard (clearing in 15s).",
-        //             service
-        //         );
-
-        //         // Background thread to clear clipboard
-        //         thread::spawn(|| {
-        //             thread::sleep(Duration::from_secs(15));
-        //             let mut cb = Clipboard::new().unwrap();
-        //             let _ = cb.set_text("".to_string());
-        //         });
-        //     }
-        // }
         Commands::Get { service } => {
             // 1. Try to get key from Daemon first
             let key = if let Some(cached_key) = get_key_from_daemon() {
@@ -119,25 +97,6 @@ fn prompt_password(prompt: &str) -> SecretString {
     io::stdin().read_line(&mut pass).unwrap();
     SecretString::new(pass.trim().to_owned().into())
 }
-
-// fn get_key_from_daemon() -> Option<[u8; 32]> {
-//     let mut stream = UnixStream::connect("/tmp/cred_manager.sock").ok()?;
-//     stream.write_all(b"GET").ok()?;
-
-//     let mut buf = [0u8; 32];
-//     match stream.read_exact(&mut buf) {
-//         Ok(_) => Some(buf),
-//         Err(_) => None,
-//     }
-// }
-
-// fn save_key_to_daemon(key: &[u8; 32]) {
-//     if let Ok(mut stream) = UnixStream::connect("/tmp/cred_manager.sock") {
-//         let mut payload = b"SET ".to_vec();
-//         payload.extend_from_slice(key);
-//         let _ = stream.write_all(&payload);
-//     }
-// }
 
 fn get_key_from_daemon() -> Option<[u8; 32]> {
     let mut stream = UnixStream::connect("/tmp/cred_manager.sock").ok()?;
