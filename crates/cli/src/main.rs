@@ -1,12 +1,13 @@
 use arboard::Clipboard;
 use clap::{Parser, Subcommand};
 use core::Crypto;
-use secrecy::SecretString;
-use std::io::{self, Read, Write};
-use std::os::unix::net::UnixStream;
+use daemon_utils::get_master_key_from_user;
+use std::io::{self, Write};
 use std::thread;
 use std::time::Duration;
 use storage::Db;
+
+mod daemon_utils;
 
 #[derive(Parser)]
 struct Cli {
@@ -38,8 +39,7 @@ fn main() {
             username,
             secret,
         } => {
-            let master = prompt_password("Enter Master Password: ");
-            let key = Crypto::derive_key(&master);
+            let key = get_master_key_from_user();
             let (encrypted, nonce) = Crypto::encrypt(&secret, &key);
             db.add_credential(&service, &username, &encrypted, &nonce)
                 .unwrap();
@@ -50,18 +50,7 @@ fn main() {
         }
         Commands::Get { service } => {
             // 1. Try to get key from Daemon first
-            let key = if let Some(cached_key) = get_key_from_daemon() {
-                println!("Using master password from cache...");
-                cached_key
-            } else {
-                // 2. Fallback to user prompt
-                let password = prompt_password("Enter Master Password: ");
-                let derived_key = Crypto::derive_key(&password);
-
-                // 3. Save to daemon for future use (Start Session)
-                save_key_to_daemon(&derived_key);
-                derived_key
-            };
+            let key = get_master_key_from_user();
 
             // 4. Proceed with decryption
             if let Ok(cred) = db.get_credential(&service) {
@@ -93,34 +82,5 @@ fn main() {
                 println!("Success: All passwords dropped from the database.");
             }
         }
-    }
-}
-
-fn prompt_password(prompt: &str) -> SecretString {
-    print!("{}", prompt);
-    io::stdout().flush().unwrap();
-    let mut pass = String::new();
-    io::stdin().read_line(&mut pass).unwrap();
-    SecretString::new(pass.trim().to_owned().into())
-}
-
-fn get_key_from_daemon() -> Option<[u8; 32]> {
-    let mut stream = UnixStream::connect("/tmp/cred_manager.sock").ok()?;
-    // Send exactly "GET"
-    stream.write_all(b"GET").ok()?;
-
-    let mut buf = [0u8; 32];
-    // If the daemon sends back 32 bytes, we have a hit
-    match stream.read_exact(&mut buf) {
-        Ok(_) => Some(buf),
-        Err(_) => None,
-    }
-}
-
-fn save_key_to_daemon(key: &[u8; 32]) {
-    if let Ok(mut stream) = UnixStream::connect("/tmp/cred_manager.sock") {
-        let mut payload = b"SET ".to_vec();
-        payload.extend_from_slice(key);
-        let _ = stream.write_all(&payload);
     }
 }
