@@ -45,6 +45,20 @@ impl Db {
         Ok(())
     }
 
+    pub fn update_credential(
+        &self,
+        service: &str,
+        ident: &str,
+        secret: &[u8],
+        nonce: &[u8],
+    ) -> Result<()> {
+        self.conn.execute(
+            "UPDATE credentials SET secret = ?3, nonce = ?4 WHERE service = ?1 AND identifier = ?2",
+            params![service, ident, secret, nonce],
+        )?;
+        Ok(())
+    }
+
     pub fn get_credential(&self, service: &str, identifier: &str) -> Result<CredentialRow> {
         self.conn.query_row(
             "SELECT secret, nonce, identifier FROM credentials WHERE service = ?1 AND identifier = ?2",

@@ -25,6 +25,12 @@ enum Commands {
     },
     /// Copy credential to clipboard
     Get { service: String, identifier: String },
+    /// Update an existing credential
+    Update {
+        service: String,
+        identifier: String,
+        secret: String,
+    },
     /// Wipe all data and forget master password
     Nuke,
 }
@@ -76,6 +82,20 @@ fn main() {
             } else {
                 println!("Error: No credential found for service `{}`.", service);
             }
+        }
+        Commands::Update {
+            service,
+            identifier,
+            secret,
+        } => {
+            let key = get_master_key_from_user();
+            let (encrypted, nonce) = Crypto::encrypt(&secret, &key);
+            db.update_credential(&service, &identifier, &encrypted, &nonce)
+                .unwrap();
+            println!(
+                "Success: Successfully updated `{}` credential for `{}`.",
+                service, identifier
+            );
         }
         Commands::Nuke => {
             print!("DANGER ZONE: Are you ABSOLUTELY sure you want to erase EVERYTHING? (y/N): ");
