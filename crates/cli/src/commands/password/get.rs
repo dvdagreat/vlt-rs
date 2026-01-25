@@ -13,7 +13,7 @@ pub fn handler(db: &Db) {
     let key = get_master_key_from_user();
 
     let selected_service = get_selected_service(db, None);
-    let selected_identifier = get_selected_identifier(db, selected_service.to_string());
+    let selected_identifier = get_selected_identifier(db, selected_service.to_string(), None);
 
     // 4. Proceed with decryption
     if let Ok(cred) = db.get_credential(&selected_service, &selected_identifier) {
