@@ -5,7 +5,7 @@ use std::thread;
 use std::time::Duration;
 use storage::Db;
 
-use crate::daemon_utils::get_master_key_from_user;
+use crate::utils::daemon_utils::get_master_key_from_user;
 
 pub fn handler(db: &Db, service: String, identifier: String) {
     // 1. Try to get key from Daemon first

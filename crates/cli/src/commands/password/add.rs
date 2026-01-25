@@ -2,9 +2,12 @@ use core::Crypto;
 
 use storage::Db;
 
-use crate::daemon_utils::get_master_key_from_user;
-pub fn handler(db: &Db, service: String, username: String, secret: String) {
+use crate::utils::{
+    credential_utils::get_user_credentials_input, daemon_utils::get_master_key_from_user,
+};
+pub fn handler(db: &Db, service: String, username: String) {
     let key = get_master_key_from_user();
+
     if db.get_credential(&service, &username).is_ok() {
         println!(
             "Error: Credential for `{}` on `{}` already exists. Use the edit command to modify it.",
@@ -13,7 +16,8 @@ pub fn handler(db: &Db, service: String, username: String, secret: String) {
         return;
     }
 
-    let (encrypted, nonce) = Crypto::encrypt(&secret, &key);
+    let secret_credential = get_user_credentials_input();
+    let (encrypted, nonce) = Crypto::encrypt(&secret_credential, &key);
     db.add_credential(&service, &username, &encrypted, &nonce)
         .unwrap();
     println!(

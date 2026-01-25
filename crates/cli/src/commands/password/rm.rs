@@ -1,6 +1,6 @@
 use storage::Db;
 
-use crate::daemon_utils::get_master_key_from_user;
+use crate::utils::daemon_utils::get_master_key_from_user;
 
 pub fn handler(db: &Db, service: String, identifier: String) {
     let key = get_master_key_from_user();

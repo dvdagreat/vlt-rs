@@ -2,7 +2,7 @@ use core::Crypto;
 
 use storage::Db;
 
-use crate::daemon_utils::{get_master_key_from_user, prompt_password, save_key_to_daemon};
+use crate::utils::daemon_utils::{get_master_key_from_user, prompt_password, save_key_to_daemon};
 
 pub fn handler(db: &Db) {
     // get master password

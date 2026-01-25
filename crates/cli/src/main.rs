@@ -2,7 +2,7 @@ use clap::{Parser, Subcommand};
 use storage::Db;
 
 pub mod commands;
-mod daemon_utils;
+pub mod utils;
 
 #[derive(Parser)]
 struct Cli {
@@ -38,24 +38,10 @@ enum ConfigCommands {
 
 #[derive(Subcommand)]
 enum PassCommands {
-    Get {
-        srv: String,
-        ident: String,
-    },
-    Add {
-        srv: String,
-        ident: String,
-        secret: String,
-    },
-    Edit {
-        srv: String,
-        ident: String,
-        secret: String,
-    },
-    Rm {
-        srv: String,
-        ident: String,
-    },
+    Get { srv: String, ident: String },
+    Add { srv: String, ident: String },
+    Edit { srv: String, ident: String },
+    Rm { srv: String, ident: String },
 }
 
 #[derive(Subcommand)]
@@ -83,12 +69,8 @@ fn main() {
         },
         Commands::Pass { action } => match action {
             PassCommands::Get { srv, ident } => commands::password::get::handler(&db, srv, ident),
-            PassCommands::Add { srv, ident, secret } => {
-                commands::password::add::handler(&db, srv, ident, secret)
-            }
-            PassCommands::Edit { srv, ident, secret } => {
-                commands::password::edit::handler(&db, srv, ident, secret)
-            }
+            PassCommands::Add { srv, ident } => commands::password::add::handler(&db, srv, ident),
+            PassCommands::Edit { srv, ident } => commands::password::edit::handler(&db, srv, ident),
             PassCommands::Rm { srv, ident } => commands::password::rm::handler(&db, srv, ident),
         },
         Commands::Ident { action } => match action {
