@@ -1,13 +1,11 @@
 use core::Crypto;
+use rpassword::prompt_password as ask_password;
 use secrecy::SecretString;
-use std::io::{self, Read, Write};
+use std::io::{Read, Write};
 use std::os::unix::net::UnixStream;
 
 pub fn prompt_password(prompt: &str) -> SecretString {
-    print!("{}", prompt);
-    io::stdout().flush().unwrap();
-    let mut pass = String::new();
-    io::stdin().read_line(&mut pass).unwrap();
+    let pass = ask_password(prompt).unwrap();
     SecretString::new(pass.trim().to_owned().into())
 }
 

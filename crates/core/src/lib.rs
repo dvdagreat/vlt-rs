@@ -7,6 +7,8 @@ use argon2::{
 use rand_core::OsRng;
 use secrecy::{ExposeSecret, SecretString};
 
+pub mod errors;
+
 pub struct CryptoHandler;
 
 impl CryptoHandler {

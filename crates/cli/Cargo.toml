@@ -10,3 +10,4 @@ keyring = "3.6.3"
 storage = { workspace = true }
 core = { workspace = true }
 secrecy = "0.10.3"
+rpassword = "7.4.0"
