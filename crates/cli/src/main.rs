@@ -51,20 +51,38 @@ enum PassCommands {
     /// Retrieve a stored password and store in the clipboard
     Get {
         #[arg(short = 'S', long = "srv")]
-        srv: String,
+        srv: Option<String>,
 
         #[arg(short = 'I', long = "ident")]
-        ident: String,
+        ident: Option<String>,
     },
 
     /// Add a new password entry
-    Add { srv: String, ident: String },
+    Add {
+        #[arg(short = 'S', long = "srv")]
+        srv: Option<String>,
+
+        #[arg(short = 'I', long = "ident")]
+        ident: Option<String>,
+    },
 
     /// Edit an existing password entry
-    Edit {},
+    Edit {
+        #[arg(short = 'S', long = "srv")]
+        srv: Option<String>,
+
+        #[arg(short = 'I', long = "ident")]
+        ident: Option<String>,
+    },
 
     /// Remove a password entry
-    Rm { srv: String, ident: String },
+    Rm {
+        #[arg(short = 'S', long = "srv")]
+        srv: Option<String>,
+
+        #[arg(short = 'I', long = "ident")]
+        ident: Option<String>,
+    },
 }
 
 #[derive(Subcommand)]
@@ -97,9 +115,9 @@ fn main() {
             ConfigCommands::ResetPass {} => commands::config::reset_pass::handler(&db),
         },
         Commands::Pass { action } => match action {
-            PassCommands::Get { ident: _, srv: _ } => commands::password::get::handler(&db),
+            PassCommands::Get { srv, ident } => commands::password::get::handler(&db, srv, ident),
             PassCommands::Add { srv, ident } => commands::password::add::handler(&db, srv, ident),
-            PassCommands::Edit {} => commands::password::edit::handler(&db),
+            PassCommands::Edit { srv, ident } => commands::password::edit::handler(&db, srv, ident),
             PassCommands::Rm { srv, ident } => commands::password::rm::handler(&db, srv, ident),
         },
         Commands::Ident { action } => match action {

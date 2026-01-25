@@ -8,12 +8,19 @@ use storage::Db;
 use crate::utils::daemon_utils::get_master_key_from_user;
 use crate::utils::selectable_utils::{get_selected_identifier, get_selected_service};
 
-pub fn handler(db: &Db) {
+pub fn handler(db: &Db, flag_service: Option<String>, flag_identifier: Option<String>) {
     // 1. Try to get key from Daemon first
     let key = get_master_key_from_user();
 
-    let selected_service = get_selected_service(db, None);
-    let selected_identifier = get_selected_identifier(db, selected_service.to_string(), None);
+    let selected_service = match flag_service {
+        None => get_selected_service(db, None),
+        Some(value_srv) => value_srv,
+    };
+
+    let selected_identifier = match flag_identifier {
+        None => get_selected_identifier(db, selected_service.to_string(), None),
+        Some(value_ident) => value_ident,
+    };
 
     // 4. Proceed with decryption
     if let Ok(cred) = db.get_credential(&selected_service, &selected_identifier) {
