@@ -55,7 +55,7 @@ enum PassCommands {
     Add { srv: String, ident: String },
 
     /// Edit an existing password entry
-    Edit { srv: String, ident: String },
+    Edit {},
 
     /// Remove a password entry
     Rm { srv: String, ident: String },
@@ -93,7 +93,7 @@ fn main() {
         Commands::Pass { action } => match action {
             PassCommands::Get {} => commands::password::get::handler(&db),
             PassCommands::Add { srv, ident } => commands::password::add::handler(&db, srv, ident),
-            PassCommands::Edit { srv, ident } => commands::password::edit::handler(&db, srv, ident),
+            PassCommands::Edit {} => commands::password::edit::handler(&db),
             PassCommands::Rm { srv, ident } => commands::password::rm::handler(&db, srv, ident),
         },
         Commands::Ident { action } => match action {
