@@ -49,7 +49,13 @@ enum ConfigCommands {
 #[derive(Subcommand)]
 enum PassCommands {
     /// Retrieve a stored password and store in the clipboard
-    Get {},
+    Get {
+        #[arg(short = 'S', long = "srv")]
+        srv: String,
+
+        #[arg(short = 'I', long = "ident")]
+        ident: String,
+    },
 
     /// Add a new password entry
     Add { srv: String, ident: String },
@@ -91,7 +97,7 @@ fn main() {
             ConfigCommands::ResetPass {} => commands::config::reset_pass::handler(&db),
         },
         Commands::Pass { action } => match action {
-            PassCommands::Get {} => commands::password::get::handler(&db),
+            PassCommands::Get { ident: _, srv: _ } => commands::password::get::handler(&db),
             PassCommands::Add { srv, ident } => commands::password::add::handler(&db, srv, ident),
             PassCommands::Edit {} => commands::password::edit::handler(&db),
             PassCommands::Rm { srv, ident } => commands::password::rm::handler(&db, srv, ident),
