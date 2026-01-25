@@ -12,7 +12,7 @@ pub fn handler(db: &Db) {
     // 1. Try to get key from Daemon first
     let key = get_master_key_from_user();
 
-    let selected_service = get_selected_service(db);
+    let selected_service = get_selected_service(db, None);
     let selected_identifier = get_selected_identifier(db, selected_service.to_string());
 
     // 4. Proceed with decryption

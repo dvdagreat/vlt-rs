@@ -1,10 +1,19 @@
 use dialoguer::{Select, theme::ColorfulTheme};
 use storage::Db;
 
-pub fn get_selected_service(db: &Db) -> String {
-    let options = db
+pub fn get_selected_service(db: &Db, add_options: Option<Vec<String>>) -> String {
+    let mut options = db
         .get_service_list()
         .expect("Cannot Fetch Selectable options");
+
+    match add_options {
+        Some(add_options) => options.append(&mut add_options.clone()),
+        None => {}
+    }
+
+    if options.len() == 0 {
+        return "".to_string();
+    }
 
     let selected_idx = Select::with_theme(&ColorfulTheme::default())
         .with_prompt("which service will you select?")
