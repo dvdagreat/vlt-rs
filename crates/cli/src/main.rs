@@ -12,18 +12,25 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Manage your master password
     Cfg {
         #[command(subcommand)]
         action: ConfigCommands,
     },
+
+    /// Manage your stored passwords
     Pass {
         #[command(subcommand)]
         action: PassCommands,
     },
+
+    /// Manage your identifiers (future, not implemented yet)
     Ident {
         #[command(subcommand)]
         action: IdentCommands,
     },
+
+    /// Manage your services (future, not implemented yet)
     Srv {
         #[command(subcommand)]
         action: ServiceCommands,
@@ -32,29 +39,45 @@ enum Commands {
 
 #[derive(Subcommand)]
 enum ConfigCommands {
+    /// Purge all stored data
     Purge {},
+
+    /// Reset your master password
     ResetPass {},
 }
 
 #[derive(Subcommand)]
 enum PassCommands {
+    /// Retrieve a stored password and store in the clipboard
     Get { srv: String, ident: String },
+
+    /// Add a new password entry
     Add { srv: String, ident: String },
+
+    /// Edit an existing password entry
     Edit { srv: String, ident: String },
+
+    /// Remove a password entry
     Rm { srv: String, ident: String },
 }
 
 #[derive(Subcommand)]
 enum IdentCommands {
+    /// List all identifiers
     List {},
+    /// Set an identifier
     Set {},
+    /// Remove an identifier
     Rm {},
 }
 
 #[derive(Subcommand)]
 enum ServiceCommands {
+    /// List all services
     List {},
+    /// Set a service
     Set {},
+    /// Remove a service
     Rm {},
 }
 
