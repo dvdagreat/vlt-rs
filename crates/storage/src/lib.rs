@@ -170,4 +170,40 @@ impl Db {
     }
 
     pub fn create_service(&self) {}
+
+    pub fn get_service_list(&self) -> Result<Vec<String>> {
+        let mut stmt = self
+            .conn
+            .prepare("SELECT DISTINCT service FROM credentials;")?;
+
+        let rows = stmt.query_map([], |row| {
+            return row.get::<_, String>(0);
+        })?;
+
+        let mut services = Vec::new();
+
+        for service in rows {
+            services.push(service?);
+        }
+
+        Ok(services)
+    }
+
+    pub fn get_identifier_list_by_service_name(&self, service_name: String) -> Result<Vec<String>> {
+        let mut stmt = self
+            .conn
+            .prepare("SELECT identifier FROM credentials where service = ?1;")?;
+
+        let rows = stmt.query_map([service_name], |row| {
+            return row.get::<_, String>(0);
+        })?;
+
+        let mut services = Vec::new();
+
+        for service in rows {
+            services.push(service?);
+        }
+
+        Ok(services)
+    }
 }
