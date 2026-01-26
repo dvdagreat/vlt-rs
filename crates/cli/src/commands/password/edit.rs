@@ -17,7 +17,9 @@ pub fn handler(db: &Db, flag_service: Option<String>, flag_identifier: Option<St
     };
 
     if selected_service == "" {
-        println!("Notice: Either there are no services stored or you didn't select a service");
+        println!(
+            "Notice: Either there are no services available or you didn't input/select a service"
+        );
         return;
     }
 
@@ -28,7 +30,7 @@ pub fn handler(db: &Db, flag_service: Option<String>, flag_identifier: Option<St
 
     if selected_identifier == "" {
         println!(
-            "Notice: Either there are no identifiers stored or you didn't select an identifier"
+            "Notice: Either there are no identifiers available or you didn't input/select an identifier"
         );
         return;
     }
