@@ -36,28 +36,31 @@ pub fn handler(db: &Db, flag_service: Option<String>, flag_identifier: Option<St
         return;
     }
 
-    // 4. Proceed with decryption
-    if let Ok(cred) = db.get_credential(&selected_service, &selected_identifier) {
-        let decrypted = Crypto::decrypt(&cred.secret, &key, &cred.nonce);
-
-        let mut cb = Clipboard::new().expect("Clipboard: Cannot connect to clipboard");
-        cb.set_text(decrypted).unwrap();
+    let cred = db.get_credential(&selected_service, &selected_identifier);
+    if cred.is_err() {
         println!(
-            "Clipboard: Password for `{}` on `{}` copied to clipboard.",
-            cred.identifier, selected_service
+            "Error: Credential for `{}` on `{}` does not exist.",
+            selected_identifier, selected_service
         );
-
-        // Clipboard auto-clear thread
-        thread::spawn(move || {
-            thread::sleep(Duration::from_secs(15));
-            if let Ok(mut cb_internal) = Clipboard::new() {
-                let _ = cb_internal.set_text("".to_string());
-            }
-        });
-    } else {
-        println!(
-            "Error: No credential found for service `{}`.",
-            selected_service
-        );
+        return;
     }
+    let credential = cred.unwrap();
+
+    // 4. Proceed with decryption
+    let decrypted = Crypto::decrypt(&credential.secret, &key, &credential.nonce);
+
+    let mut cb = Clipboard::new().expect("Clipboard: Cannot connect to clipboard");
+    cb.set_text(decrypted).unwrap();
+    println!(
+        "Clipboard: Password for `{}` on `{}` copied to clipboard.",
+        credential.identifier, selected_service
+    );
+
+    // Clipboard auto-clear thread
+    thread::spawn(move || {
+        thread::sleep(Duration::from_secs(15));
+        if let Ok(mut cb_internal) = Clipboard::new() {
+            let _ = cb_internal.set_text("".to_string());
+        }
+    });
 }
