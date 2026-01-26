@@ -5,18 +5,20 @@ use storage::Db;
 use crate::utils::{
     credential_utils::get_user_credentials_input,
     daemon_utils::get_master_key_from_user,
-    selectable_utils::{get_selected_identifier, get_selected_service},
+    selectable_utils::{
+        get_selected_identifier_for_add_password, get_selected_service_for_add_password,
+    },
 };
 pub fn handler(db: &Db, flag_service: Option<String>, flag_identifier: Option<String>) {
     let key = get_master_key_from_user();
 
     let selected_service = match flag_service {
-        None => get_selected_service(db, None),
+        None => get_selected_service_for_add_password(db),
         Some(value_srv) => value_srv,
     };
 
     let selected_identifier = match flag_identifier {
-        None => get_selected_identifier(db, selected_service.to_string(), None),
+        None => get_selected_identifier_for_add_password(),
         Some(value_ident) => value_ident,
     };
 
