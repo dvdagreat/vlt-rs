@@ -1,6 +1,6 @@
-use core::Crypto;
+use vlt_crypto::Crypto;
 
-use storage::Db;
+use vlt_store::Db;
 
 use crate::utils::{
     credential_utils::get_user_credentials_input,

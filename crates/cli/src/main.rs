@@ -1,7 +1,7 @@
 use std::{fs, path::PathBuf};
 
 use clap::{Parser, Subcommand};
-use storage::Db;
+use vlt_store::Db;
 
 pub mod commands;
 pub mod utils;

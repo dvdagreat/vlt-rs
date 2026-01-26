@@ -1,6 +1,10 @@
 [package]
-name = "daemon"
+name = "vlt_daemon"
 version = "0.1.0"
 edition = "2024"
+
+[[bin]]
+name = "vlt_daemon"
+path = "src/main.rs"
 
 [dependencies]

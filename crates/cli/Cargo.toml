@@ -11,8 +11,8 @@ path = "src/main.rs"
 arboard = "3.6.1"
 clap = { version = "4.5.54", features = ["derive"] }
 keyring = "3.6.3"
-storage = { workspace = true }
-core = { workspace = true }
+vlt_store = { workspace = true }
+vlt_crypto = { workspace = true }
 secrecy = "0.10.3"
 rpassword = "7.4.0"
 dialoguer = "0.12.0"

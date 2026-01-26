@@ -1,9 +1,9 @@
-use core::Crypto;
+use vlt_crypto::Crypto;
 
 use arboard::Clipboard;
 use std::thread;
 use std::time::Duration;
-use storage::Db;
+use vlt_store::Db;
 
 use crate::utils::daemon_utils::get_master_key_from_user;
 use crate::utils::selectable_utils::{get_selected_identifier, get_selected_service};

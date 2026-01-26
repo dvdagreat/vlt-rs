@@ -267,13 +267,13 @@ dependencies = [
  "arboard",
  "clap",
  "console",
- "core",
  "dialoguer",
  "dirs",
  "keyring",
  "rpassword",
  "secrecy",
- "storage",
+ "vlt_crypto",
+ "vlt_store",
 ]
 
 [[package]]
@@ -311,17 +311,6 @@ dependencies = [
  "once_cell",
  "unicode-width",
  "windows-sys 0.61.2",
-]
-
-[[package]]
-name = "core"
-version = "0.1.0"
-dependencies = [
- "aes-gcm",
- "argon2",
- "rand",
- "rand_core 0.6.4",
- "secrecy",
 ]
 
 [[package]]
@@ -367,10 +356,6 @@ checksum = "0369ee1ad671834580515889b80f2ea915f23b8be8d0daa4bbaf2ac5c7590835"
 dependencies = [
  "cipher",
 ]
-
-[[package]]
-name = "daemon"
-version = "0.1.0"
 
 [[package]]
 name = "dialoguer"
@@ -1204,13 +1189,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "storage"
-version = "0.1.0"
-dependencies = [
- "rusqlite",
-]
-
-[[package]]
 name = "strsim"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1325,6 +1303,28 @@ name = "version_check"
 version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
+
+[[package]]
+name = "vlt_crypto"
+version = "0.1.0"
+dependencies = [
+ "aes-gcm",
+ "argon2",
+ "rand",
+ "rand_core 0.6.4",
+ "secrecy",
+]
+
+[[package]]
+name = "vlt_daemon"
+version = "0.1.0"
+
+[[package]]
+name = "vlt_store"
+version = "0.1.0"
+dependencies = [
+ "rusqlite",
+]
 
 [[package]]
 name = "wasi"

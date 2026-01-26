@@ -1,6 +1,6 @@
 use std::io::{self, Write};
 
-use storage::Db;
+use vlt_store::Db;
 
 pub fn handler(db: &Db) {
     print!("DANGER ZONE: Are you ABSOLUTELY sure you want to erase EVERYTHING? (y/N): ");

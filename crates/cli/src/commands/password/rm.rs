@@ -1,4 +1,4 @@
-use storage::Db;
+use vlt_store::Db;
 
 use crate::utils::{
     daemon_utils::get_master_key_from_user,

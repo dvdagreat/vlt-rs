@@ -1,7 +1,7 @@
 use std::io::{self, Write};
 
 use dialoguer::{Select, theme::ColorfulTheme};
-use storage::Db;
+use vlt_store::Db;
 
 pub fn get_selected_service(db: &Db, add_options: Option<Vec<String>>) -> String {
     let mut options = db

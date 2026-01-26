@@ -1,4 +1,4 @@
-use core::Crypto;
+use vlt_crypto::Crypto;
 use rpassword::prompt_password as ask_password;
 use secrecy::SecretString;
 use std::io::{Read, Write};
