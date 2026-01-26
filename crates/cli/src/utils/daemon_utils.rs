@@ -1,8 +1,8 @@
-use vlt_crypto::Crypto;
 use rpassword::prompt_password as ask_password;
 use secrecy::SecretString;
 use std::io::{Read, Write};
 use std::os::unix::net::UnixStream;
+use vlt_crypto::Crypto;
 
 pub fn prompt_password(prompt: &str) -> SecretString {
     let pass = ask_password(prompt).unwrap();
@@ -41,8 +41,10 @@ pub fn get_key_from_daemon() -> Option<[u8; 32]> {
 
 pub fn save_key_to_daemon(key: &[u8; 32]) {
     if let Ok(mut stream) = UnixStream::connect("/tmp/cred_manager.sock") {
+        println!("Notice: Looks like you have the vlt_daemon running...");
         let mut payload = b"SET ".to_vec();
         payload.extend_from_slice(key);
         let _ = stream.write_all(&payload);
+        println!("Notice: Successfully synced the updated password with vlt_daemon");
     }
 }
