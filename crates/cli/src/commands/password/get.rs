@@ -17,14 +17,19 @@ pub fn handler(db: &Db, flag_service: Option<String>, flag_identifier: Option<St
         Some(value_srv) => value_srv,
     };
 
+    if selected_service == "" {
+        println!("Notice: Either there are no services stored or you didn't select a service");
+        return;
+    }
+
     let selected_identifier = match flag_identifier {
         None => get_selected_identifier(db, selected_service.to_string(), None),
         Some(value_ident) => value_ident,
     };
 
-    if selected_service == "" || selected_identifier == "" {
+    if selected_identifier == "" {
         println!(
-            "Notice: There are no stored credentials. Use `vlt pass add` to store a credential"
+            "Notice: Either there are no identifiers stored or you didn't select an identifier"
         );
         return;
     }
