@@ -1,3 +1,5 @@
+use std::{fs, path::PathBuf};
+
 use clap::{Parser, Subcommand};
 use storage::Db;
 
@@ -105,9 +107,18 @@ enum ServiceCommands {
     Rm {},
 }
 
+fn get_store_path() -> PathBuf {
+    let mut dir = dirs::home_dir().unwrap();
+    dir.push(".vlt");
+    fs::create_dir_all(&dir).unwrap();
+
+    dir.join("vault.db")
+}
+
 fn main() {
     let cli = Cli::parse();
-    let db = Db::init("vault.db").expect("Failed to access the credential store");
+    let db_path = get_store_path();
+    let db = Db::init(db_path.to_str().unwrap()).expect("Failed to access the credential store");
 
     match cli.command {
         Commands::Cfg { action } => match action {
