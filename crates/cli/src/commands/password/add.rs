@@ -17,10 +17,22 @@ pub fn handler(db: &Db, flag_service: Option<String>, flag_identifier: Option<St
         Some(value_srv) => value_srv,
     };
 
+    if selected_service == "" {
+        println!("Notice: Either there are no services stored or you didn't select a service");
+        return;
+    }
+
     let selected_identifier = match flag_identifier {
         None => get_selected_identifier_for_add_password(),
         Some(value_ident) => value_ident,
     };
+
+    if selected_identifier == "" {
+        println!(
+            "Notice: Either there are no identifiers stored or you didn't select an identifier"
+        );
+        return;
+    }
 
     if db
         .get_credential(&selected_service, &selected_identifier)
@@ -34,6 +46,10 @@ pub fn handler(db: &Db, flag_service: Option<String>, flag_identifier: Option<St
     }
 
     let secret_credential = get_user_credentials_input();
+    if secret_credential == "" {
+        println!("Error: Credentials cannot be empty");
+        return;
+    }
     let (encrypted, nonce) = Crypto::encrypt(&secret_credential, &key);
     db.add_credential(&selected_service, &selected_identifier, &encrypted, &nonce)
         .unwrap();
