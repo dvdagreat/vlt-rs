@@ -22,6 +22,13 @@ pub fn handler(db: &Db, flag_service: Option<String>, flag_identifier: Option<St
         Some(value_ident) => value_ident,
     };
 
+    if selected_service == "" || selected_identifier == "" {
+        println!(
+            "Notice: There are no stored credentials. Use `vlt pass add` to store a credential"
+        );
+        return;
+    }
+
     // 4. Proceed with decryption
     if let Ok(cred) = db.get_credential(&selected_service, &selected_identifier) {
         let decrypted = Crypto::decrypt(&cred.secret, &key, &cred.nonce);
