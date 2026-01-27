@@ -107,12 +107,13 @@ Lightweight & Native — No GUI bloat or heavy external dependencies. Built for 
 
 Hardened Security — Utilizes the Argon2 hashing algorithm for robust key derivation, ensuring your data is protected by industry-standard cryptography.
 
-## What are some cons of using `vlt`
-You lose the ability to access your passwords across systems
+## Downsides of using `vlt`
+- (accessibility) You lose the ability to access your passwords across machines.
 
-There are no Autofill solutions (...yet! I am working on a solution)
+- (accessibility) You can't use Autofill (...yet! I have another tool planned for this purpose)
 
-You need to be careful against social engineering by hackers. If they get your master password then they can access all your passwords. (though much of this can be solved by `groups` feature, which is still a WIP)
+- (human psychology) You need to be careful against social engineering by hackers. If they get your master password then they can access all your passwords. 
+Although `groups` feature (still WIP), can help reduce the risk of full exposure of credentials but partial exposure risk still exists
 
-You need to keep your master password safe. If you forget it, there is no way to restore your password due to zero knowledge architecture
+- (accessibility) If you forget your master password, there is no way to restore your password due to zero knowledge architecture
 
