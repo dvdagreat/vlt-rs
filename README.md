@@ -17,6 +17,20 @@ git clone https://github.com/dvdagreat/vlt-rs.git
 cd vlt-rs
 ```
 
+if you see an error like like 
+```bash
+= note: some arguments are omitted. use `--verbose` to show all linker arguments
+= note: rust-lld: error: unable to find library -lsqlite3
+        collect2: error: ld returned 1 exit status
+```
+
+You probably need libsqlite3 library install. Install it via below command
+```bash 
+sudo apt update
+
+sudo apt install libsqlite3-dev
+```
+
 ### 2. Compile the Project
 ```bash
 # Build the main CLI
