@@ -1,62 +1,4 @@
-1) vlt cfg 
-
-Commands
-init          : set master password for the first time, throws an error if already set
-purge         : removes the master password and all the stored data
-reset-pass    : resets the master password, throws an error if a master password does not exist
-
-2) vlt pass
-
-Commands
-get           : store a password in the clipboard
-set           : edits a password, uses a hidden text input
-rm            : removes a password, also removes identifier
-
-Flags
--S, --srv: This flag is optional, 
-The name of the service, can be any userdefined string without spaces 
-if not provided, a selectable list is shown from which a user can select from the available services
-            
--I, --ident: This flag is optional
-This can be any identifier like email, username, token name, etc
-if not provided, a selectable list is shown from which a user can select from the available identifier
-
-3) vlt ident
-
-Commands
-list          : prints the all identifier of all the services to stdout
-find          : fuzzy search identier across all services
-set           : edit the identifier name using a text input
-rm            : removes identifier, (same as removing password)
-
-Flags
--S, --srv: This flag is optional, 
-The name of the service, can be any userdefined string without spaces.
-if not provided, all services are selected.
-Multiple flag can be used at the same time  (eg. vlt ident -S aws -S facebook)
-            
--N, --name: This flag is optional
-
-This can be any identifier like email, username, token name, etc
-if not provided, a selectable list is shown from which a user can select from the available identifier
-
-3) vlt srv 
-
-Commands
-list          : prints all the availabe services to stdout
-set           : update service name using a text input
-rm            : remove service including associated identifiers and passwords
-
-Flags
--N, --name: This flag is optional, 
-The name of the service, can be any userdefined string without spaces 
-if not provided, a selectable list is shown from which a user can select from the available services
-only used for subcommands `set` and `remove`
-
-
--------------- test --------------
-
-vlt cfg init: initialize vault
+1) Implemented
 vlt cfg purge: remove vault
 vlt cfg reset-pass: reset master password
 
@@ -67,6 +9,8 @@ vlt pass set: set credential secret but select service & identifier via interact
 vlt pass rm -S aws -I dvdagreat: removes credential secret where service is aws & identifier is dvdagreat.
 vlt pass rm: removes credential secret but select service & identifier via interactive terminal prompts.
 
+
+2) Commands not yet implemented
 vlt ident list: print a list of identifiers with their associated service
 vlt ident list -S aws: list all identifiers in service aws
 vlt ident list -S aws -S facebook: list all identifiers in services aws & facebook
