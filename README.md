@@ -13,7 +13,7 @@ too fast? Here's the demo in video format: <a href="./assets/demo.mp4"> Video Li
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/dvdagreat/vlt-rs.git](https://github.com/dvdagreat/vlt-rs.git)
+git clone https://github.com/dvdagreat/vlt-rs.git
 cd vlt-rs
 ```
 
