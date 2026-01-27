@@ -3,10 +3,11 @@ A terminal-based, fully local password manager written in Rust. Secure, simple, 
 
 ## Quick demo
 <p align="center">
-  <video src="./assets/demo.mp4" width="900" controls autoplay loop muted></video>
+  <!-- <video src="./assets/demo.mp4" width="900" controls autoplay loop muted></video> -->
+  <img src="./assets/demo.gif" width="1080" />
 </p>
 
-
+too fast? Here's the demo in video format: <a href="./assets/demo.mp4"> Video Link </a>
 
 ## Installation & Setup
 
