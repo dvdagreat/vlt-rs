@@ -112,7 +112,7 @@ You lose the ability to access your passwords across systems
 
 There are no Autofill solutions (...yet! I am working on a solution)
 
-You need to be careful against social engineering by hackers. If they get your master password then they can access all your passwords. (through much of this can be solved by `groups` feature, see future goals)
+You need to be careful against social engineering by hackers. If they get your master password then they can access all your passwords. (through much of this can be solved by `groups` feature, which is still a WIP)
 
 You need to keep your master password safe. If you forget it, there is no way to restore your password due to zero knowledge architecture
 
