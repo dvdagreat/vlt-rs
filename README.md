@@ -17,6 +17,15 @@ git clone https://github.com/dvdagreat/vlt-rs.git
 cd vlt-rs
 ```
 
+### 2. Compile the Project
+```bash
+# Build the main CLI
+cargo build --release --bin vlt
+
+# Build the daemon (optional)
+cargo build --release --bin vlt_daemon
+```
+
 if you see an error like like 
 ```bash
 = note: some arguments are omitted. use `--verbose` to show all linker arguments
@@ -29,15 +38,6 @@ You probably need libsqlite3 library install. Install it via below command
 sudo apt update
 
 sudo apt install libsqlite3-dev
-```
-
-### 2. Compile the Project
-```bash
-# Build the main CLI
-cargo build --release --bin vlt
-
-# Build the daemon (optional)
-cargo build --release --bin vlt_daemon
 ```
 
 ### 3. Configure Aliases
