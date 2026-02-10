@@ -1,5 +1,7 @@
 ## vlt-rs
-A terminal-based, fully local password manager written in Rust. Secure, simple, and deliberate.
+A cross-platform terminal-based, fully local password manager written in Rust. Secure, simple, and deliberate.
+
+Supports **Linux** and **Windows**.
 
 ## Quick demo
 <p align="center">
@@ -11,40 +13,28 @@ too fast? Here's the demo in video format: <a href="./assets/demo.mp4"> Video Li
 
 ## Installation & Setup
 
-### 1. Clone the Repository
+### Prerequisites
+- Rust toolchain installed (https://rustup.rs/)
+
+### Install Globally
+
+Install `vlt` and `vlt_daemon` globally using Cargo. This works on all platforms (Linux, macOS, Windows):
+
 ```bash
+# Clone the repository
 git clone https://github.com/dvdagreat/vlt-rs.git
 cd vlt-rs
+
+# Install both binaries globally
+cargo install --path crates/cli
+cargo install --path crates/daemon
 ```
 
-### 2. Compile the Project
+The binaries will be installed to `~/.cargo/bin/` (or `%USERPROFILE%\.cargo\bin\` on Windows), which is typically already in your PATH after installing Rust.
+
+Verify installation:
 ```bash
-# Build the main CLI
-cargo build --release --bin vlt
-
-# Build the daemon (optional)
-cargo build --release --bin vlt_daemon
-```
-
-if you see an error like like 
-```bash
-= note: some arguments are omitted. use `--verbose` to show all linker arguments
-= note: rust-lld: error: unable to find library -lsqlite3
-        collect2: error: ld returned 1 exit status
-```
-
-You probably need libsqlite3 library install. Install it via below command
-```bash 
-sudo apt update
-
-sudo apt install libsqlite3-dev
-```
-
-### 3. Configure Aliases
-Add these to your .bashrc or .zshrc for easy access (replace [path-to-repo] with your actual directory):
-```bash
-alias vlt="[path-to-repo]/target/release/vlt"
-alias vlt_daemon="[path-to-repo]/target/release/vlt_daemon"
+vlt --help
 ```
 
 ---
@@ -69,11 +59,12 @@ vlt pass --help
 
 ## Using the Daemon
 If you don't want to type your master password for every command, run the daemon in a dedicated terminal window:
+
 ```bash
 vlt_daemon
 ```
 
-While running, vlt will automatically pull the cached password for 5 minutes.
+While running, `vlt` will automatically pull the cached password for 5 minutes (configurable).
 
 ---
 
@@ -115,11 +106,13 @@ Secure Storage — Add, retrieve, and manage credentials via an intuitive CLI. D
 
 Master Password Protection — Only one password to remember. The master password is never stored on disk, placing the full weight of security in the user's hands.
 
-Smart Daemon Tool — The vlt_daemon caches your master password in memory for 5 minutes, balancing high security with developer productivity.
+Smart Daemon Tool — The vlt_daemon caches your master password in memory for 5 minutes, balancing high security with developer productivity. Uses Unix sockets on Linux/macOS and Named Pipes on Windows for secure inter-process communication.
 
 Lightweight & Native — No GUI bloat or heavy external dependencies. Built for speed and shell integration.
 
 Hardened Security — Utilizes the Argon2 hashing algorithm for robust key derivation, ensuring your data is protected by industry-standard cryptography.
+
+Cross-Platform — Works seamlessly on Linux and Windows with platform-specific optimizations.
 
 ## Downsides of using `vlt`
 - (accessibility) You lose the ability to access your passwords across machines.
