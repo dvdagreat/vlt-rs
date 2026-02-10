@@ -8,3 +8,6 @@ name = "vlt_daemon"
 path = "src/main.rs"
 
 [dependencies]
+
+[target.'cfg(windows)'.dependencies]
+uds_windows = "1.1.0"

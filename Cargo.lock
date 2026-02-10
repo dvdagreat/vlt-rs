@@ -272,6 +272,7 @@ dependencies = [
  "keyring",
  "rpassword",
  "secrecy",
+ "uds_windows",
  "vlt_crypto",
  "vlt_store",
 ]
@@ -667,6 +668,7 @@ version = "0.36.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95b4103cffefa72eb8428cb6b47d6627161e51c2739fc5e3b734584157bc642a"
 dependencies = [
+ "cc",
  "pkg-config",
  "vcpkg",
 ]
@@ -691,6 +693,15 @@ name = "log"
 version = "0.4.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
+
+[[package]]
+name = "memoffset"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "488016bfae457b036d996092f6cb448677611ce4449e970ceaf42695203f218a"
+dependencies = [
+ "autocfg 1.5.0",
+]
 
 [[package]]
 name = "miniz_oxide"
@@ -1265,6 +1276,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "562d481066bde0658276a35467c4af00bdc6ee726305698a55b86e61d7ad82bb"
 
 [[package]]
+name = "uds_windows"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "89daebc3e6fd160ac4aa9fc8b3bf71e1f74fbf92367ae71fb83a037e8bf164b9"
+dependencies = [
+ "memoffset",
+ "tempfile",
+ "winapi",
+]
+
+[[package]]
 name = "unicode-ident"
 version = "1.0.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1318,6 +1340,9 @@ dependencies = [
 [[package]]
 name = "vlt_daemon"
 version = "0.1.0"
+dependencies = [
+ "uds_windows",
+]
 
 [[package]]
 name = "vlt_store"

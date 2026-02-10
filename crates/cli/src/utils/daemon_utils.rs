@@ -1,8 +1,18 @@
 use rpassword::prompt_password as ask_password;
 use secrecy::SecretString;
 use std::io::{Read, Write};
+
+#[cfg(unix)]
 use std::os::unix::net::UnixStream;
+
+#[cfg(windows)]
+use uds_windows::UnixStream;
+
 use vlt_crypto::Crypto;
+
+fn get_socket_path() -> std::path::PathBuf {
+    std::env::temp_dir().join("vlt_cred_manager.sock")
+}
 
 pub fn prompt_password(prompt: &str) -> SecretString {
     let pass = ask_password(prompt).unwrap();
@@ -27,7 +37,8 @@ pub fn get_master_key_from_user() -> [u8; 32] {
 }
 
 pub fn get_key_from_daemon() -> Option<[u8; 32]> {
-    let mut stream = UnixStream::connect("/tmp/cred_manager.sock").ok()?;
+    let socket_path = get_socket_path();
+    let mut stream = UnixStream::connect(&socket_path).ok()?;
     // Send exactly "GET"
     stream.write_all(b"GET").ok()?;
 
@@ -40,7 +51,8 @@ pub fn get_key_from_daemon() -> Option<[u8; 32]> {
 }
 
 pub fn save_key_to_daemon(key: &[u8; 32]) {
-    if let Ok(mut stream) = UnixStream::connect("/tmp/cred_manager.sock") {
+    let socket_path = get_socket_path();
+    if let Ok(mut stream) = UnixStream::connect(&socket_path) {
         println!("Notice: Looks like you have the vlt_daemon running...");
         let mut payload = b"SET ".to_vec();
         payload.extend_from_slice(key);
